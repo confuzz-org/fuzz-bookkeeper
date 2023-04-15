@@ -49,12 +49,18 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.lang.StringUtils;
 
+import edu.illinois.confuzz.internal.ConfigTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Abstract configuration.
  */
 @Slf4j
 public abstract class AbstractConfiguration<T extends AbstractConfiguration>
     extends CompositeConfiguration {
+
+    public static final Logger LOG = LoggerFactory.getLogger(AbstractConfiguration.class);
 
     public static final String READ_SYSTEM_PROPERTIES_PROPERTY = "org.apache.bookkeeper.conf.readsystemproperties";
 
@@ -197,6 +203,19 @@ public abstract class AbstractConfiguration<T extends AbstractConfiguration>
             // add configuration for system properties
             addConfiguration(new SystemConfiguration());
         }
+    }
+
+    @Override
+    public void setProperty(String key, Object val) {
+        super.setProperty(key, val);
+        ConfigTracker.trackSet(LOG, key, val);
+    }
+
+    @Override
+    public Object getProperty(String key) {
+        Object val = super.getProperty(key);
+        ConfigTracker.trackGet(LOG, key, val);
+        return val;
     }
 
     /**
