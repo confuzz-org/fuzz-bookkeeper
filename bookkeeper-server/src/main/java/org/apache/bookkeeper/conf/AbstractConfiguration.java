@@ -205,6 +205,12 @@ public abstract class AbstractConfiguration<T extends AbstractConfiguration>
         }
     }
 
+    /*
+    public void generatorSet(String key, Object val) {
+        super.setProperty(key, val);
+    }
+    */
+
     @Override
     public void setProperty(String key, Object val) {
         super.setProperty(key, val);
