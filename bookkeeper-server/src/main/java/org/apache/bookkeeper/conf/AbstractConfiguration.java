@@ -199,17 +199,16 @@ public abstract class AbstractConfiguration<T extends AbstractConfiguration>
 
     protected AbstractConfiguration() {
         super();
+        if (ConfigurationGenerator.getGeneratedConfig() != null) {
+            for (Map.Entry<String, Object> entry: ConfigurationGenerator.getGeneratedConfig().entrySet()) {
+                super.setProperty(entry.getKey(), entry.getValue());
+            }
+        }
         if (READ_SYSTEM_PROPERTIES) {
             // add configuration for system properties
             addConfiguration(new SystemConfiguration());
         }
     }
-
-    /*
-    public void generatorSet(String key, Object val) {
-        super.setProperty(key, val);
-    }
-    */
 
     @Override
     public void setProperty(String key, Object val) {
